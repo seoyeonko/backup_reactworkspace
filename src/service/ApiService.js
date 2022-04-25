@@ -17,10 +17,19 @@ export function call(api, method, request) {
     options.body = JSON.stringify(request);
   }
 
+  // return fetch(options.url, options).then((response) =>
+  //   response.json().then((json) => {
+  //     if (!response.ok) {
+  //       // !false = 에러 응답
+  //       return Promise.reject(json);
+  //     }
+  //     return json;
+  //   })
+  // );
+
   return fetch(options.url, options).then((response) =>
     response.json().then((json) => {
       if (!response.ok) {
-        // !false = 에러 응답
         return Promise.reject(json);
       }
       return json;

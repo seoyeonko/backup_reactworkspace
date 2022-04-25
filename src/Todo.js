@@ -14,6 +14,7 @@ class Todo extends React.Component {
     super(props);
     this.state = { item: props.item, readOnly: true }; // Component가 갖는 값
     this.delete = props.delete;
+    this.update = props.update;
   }
 
   editEventHandler = (e) => {
@@ -34,6 +35,7 @@ class Todo extends React.Component {
   enterKeyEventHandler = (e) => {
     if (e.key === 'Enter') {
       this.setState({ readOnly: true }); // input에서 enter키로 입력을 마치면 편집 불가능하도록 상태값 변경
+      this.update(this.state.item); // 엔터를 누르면 update 함수 실행해 저장하기
     }
   };
 
@@ -45,6 +47,7 @@ class Todo extends React.Component {
     const thisItem = this.state.item;
     thisItem.done = !thisItem.done;
     this.setState({ item: thisItem });
+    this.update(this.state.item); // 체크박스 변경시 update 함수 실행해 저장하기
   };
 
   render() {
