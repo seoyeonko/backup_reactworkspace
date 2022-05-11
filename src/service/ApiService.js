@@ -17,22 +17,31 @@ export function call(api, method, request) {
     options.body = JSON.stringify(request);
   }
 
-  // return fetch(options.url, options).then((response) =>
-  //   response.json().then((json) => {
-  //     if (!response.ok) {
-  //       // !false = 에러 응답
-  //       return Promise.reject(json);
-  //     }
-  //     return json;
-  //   })
-  // );
-
   return fetch(options.url, options).then((response) =>
-    response.json().then((json) => {
-      if (!response.ok) {
-        return Promise.reject(json);
-      }
-      return json;
-    })
+    response
+      .json()
+      .then((json) => {
+        if (!response.ok) {
+          return Promise.reject(json);
+        }
+        return json;
+      })
+      .catch((error) => {
+        console.log(error.status);
+        // App.js componentDidMount, add, delete, update 실행;
+        // !login (status code is 403; /login redirect)
+        if (error.status === 403) {
+          window.location.href = '/login'; // redirect
+        }
+
+        return Promise.reject(error);
+      })
   );
+}
+
+export function signin(userDTO) {
+  return call('/autho/signin', 'POST', userDTO).then((response) => {
+    console.log('response: ', response);
+    alert('로그인 토큰: ' + response.token); // response: UserDTO 객체
+  });
 }
