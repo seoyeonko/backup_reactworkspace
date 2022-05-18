@@ -1,9 +1,18 @@
 import React from 'react';
 import Todo from './Todo';
 import AddTodo from './AddTodo';
-import { Paper, List, Container } from '@material-ui/core';
+import {
+  Paper,
+  List,
+  Container,
+  Grid,
+  Button,
+  AppBar,
+  Toolbar,
+  Typography,
+} from '@material-ui/core';
 import './App.css';
-import { call } from './service/ApiService';
+import { call, signout } from './service/ApiService';
 
 class App extends React.Component {
   constructor(props) {
@@ -14,12 +23,13 @@ class App extends React.Component {
         // { id: 1, title: 'Hello World 2', done: false },
         // { id: 2, title: 'Hello World 3', done: false },
       ],
+      loading: true, // state에 담아둔 이유; 값이 변하면 다시 rendering
     };
   }
 
   componentDidMount() {
     call('/todo', 'GET', null).then((response) =>
-      this.setState({ items: response.data })
+      this.setState({ items: response.data, loading: false })
     );
   }
 
@@ -79,14 +89,45 @@ class App extends React.Component {
       </Paper>
     );
 
-    return (
+    // navigationBar 추가
+    var navigationBar = (
+      <AppBar position="static">
+        <Toolbar>
+          <Grid justify="space-between" container>
+            <Grid item>
+              <Typography varient="h6">오늘의 할일</Typography>
+            </Grid>
+            <Grid>
+              <Button color="inherit" onClick={signout}>
+                Logout
+              </Button>
+            </Grid>
+          </Grid>
+        </Toolbar>
+      </AppBar>
+    );
+
+    // !loading rendering ui
+    var todoListPage = (
       <div>
+        {navigationBar} {/* navigationBar rendering */}
         <Container maxWidth="md">
           <AddTodo add={this.add} />
           <div className="TodoList">{todoItems}</div>
         </Container>
       </div>
     );
+
+    // loading(true) rendering ui
+    var loadingPage = <h1>loading...</h1>;
+    var content = loadingPage;
+
+    if (!this.state.loading) {
+      // !laodign(!false) - 로딩중 아니면; todoListPage
+      content = todoListPage;
+    }
+
+    return <div className="App">{content}</div>;
   }
 }
 
