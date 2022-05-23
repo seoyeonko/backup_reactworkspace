@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import App from './App';
 import Login from './Login';
+import SignUp from './SignUp';
 
 function Copyright() {
   return (
@@ -24,6 +25,7 @@ class AppRouter extends React.Component {
             <Routes>
               <Route path="/" element={<App />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<SignUp />} />
             </Routes>
 
             {/* ver5 설치가 안되어서 v6으로 진행함 */}
